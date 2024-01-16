@@ -1,0 +1,98 @@
+﻿@model FootlooseFS.Models.Person
+
+<script>
+    function save() {
+        $.ajax({
+            url: "Person/Save",
+            type: "POST",
+            data: $("form").serialize(),
+            contentType: "application/x-www-form-urlencoded",
+            async: true,
+            success: function (message, textStatus, jqXHR) {
+                // Display the success messsage
+                var html = "<div class='alert alert-success'>" + message + "</div>";
+                $('#divSaveMessage').html(html);
+
+                setReloadRequired();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+</script>
+
+<button type="button" class="btn btn-primary" onclick="save()">Save changes</button>
+
+<form role="form">
+    @Html.AntiForgeryToken()
+
+    <div id="divSaveMessage" style="margin-top:5px;" />
+
+    @Html.HiddenFor(m => m.PersonID)
+
+    <table style="width:900px;" cellpadding="10">
+        <tr>
+            <td style="vertical-align:top;">
+                <div class="form-group">
+                    <label class="control-label">First Name</label>
+                    @Html.TextBoxFor(m => m.FirstName)
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Last Name</label>
+                    @Html.TextBoxFor(m => m.LastName)
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Email Address</label>
+                    @Html.TextBoxFor(m => m.EmailAddress)
+                </div>
+
+                @for (int p = 0; p < Model.Phones.Count; p++)
+                {
+                    <div class="form-group">
+                        <label class="control-label">@Model.Phones[p].PhoneType.Name Phone</label>
+                        @Html.TextBoxFor(m => m.Phones[p].Number)
+                    </div>
+                    @Html.HiddenFor(m => m.Phones[p].PhoneTypeID)
+                }            
+                
+                @for (int a = 0; a < Model.Addresses.Count; a++)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">@Model.Addresses[a].AddressType.Name Address</h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body" style="padding: 20px;">
+                                <div class="form-group">
+                                    <label class="control-label">Street Address</label>
+                                    @Html.TextBoxFor(m => m.Addresses[a].Address.StreetAddress)
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(m => m.Addresses[a].Address.City)
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(m => m.Addresses[a].Address.State)
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Zip</label>
+                                    @Html.TextBoxFor(m => m.Addresses[a].Address.Zip)
+                                </div>
+
+                                @Html.HiddenFor(m => m.Addresses[a].AddressTypeID)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </td>                        
+        </tr>
+    </table>
+</form>
+
+

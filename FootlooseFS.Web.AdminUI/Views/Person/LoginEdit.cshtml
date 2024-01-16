@@ -1,0 +1,18 @@
+﻿@model FootlooseFS.Models.PersonLogin
+
+<form role="form">
+    @Html.AntiForgeryToken()
+
+    <div id="divSaveMessage" style="margin-top:5px;" />
+
+    <table>
+        <tr>
+            <td style="vertical-align:top;">
+                <div class="form-group">
+                    <label for="loginID" class="control-label">Login ID</label>
+                    @Html.LabelFor(m => m.LoginID)
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
